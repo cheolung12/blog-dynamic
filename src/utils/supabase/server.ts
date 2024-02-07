@@ -1,8 +1,6 @@
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { createServerClient } from "@supabase/ssr";
 
-export const createClient = (
-  cookies: Partial<{ [key: string]: string | undefined }>,
-) => {
+export const createClient = (cookies: Partial<{ [key: string]: string }>) => {
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
