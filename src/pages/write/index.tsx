@@ -1,3 +1,4 @@
+import Input from "@/components/Input";
 import { MarkdownEditor } from "@/components/Markdown";
 import { createClient } from "@/utils/supabase/server";
 import { GetServerSideProps } from "next";
@@ -14,9 +15,8 @@ export default function Write({
   existingTags,
   existingCategories,
 }: WriteProps) {
-  console.log("render");
+  const titleRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
-  const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [tags, setTags] = useState("");
   const [content, setContent] = useState("");
@@ -25,9 +25,16 @@ export default function Write({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // 유효성 검사
+    if (!titleRef.current?.value || titleRef.current.value.length === 0)
+      return alert("제목을 입력해주세요.");
+    if (category.length === 0) return alert("카테고리를 입력해주세요.");
+    if (tags.length === 0) return alert("태그를 입력해주세요.");
+    if (content.length === 0) return alert("글 내용을 입력해주세요.");
+
     const formData = new FormData();
 
-    formData.append("title", title);
+    formData.append("title", titleRef.current?.value ?? "");
     formData.append("category", category);
     formData.append("tags", tags);
     formData.append("content", content);
@@ -53,19 +60,9 @@ export default function Write({
       <h1 className="mb-8 text-2xl font-medium">새로운 글</h1>
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-3">
-          <input
-            type="text"
-            placeholder="제목"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="rounded-md border border-gray-300 p-2 transition-all hover:border-gray-400"
-          />
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileRef}
-            className="rounded-md border border-gray-300 p-2 transition-all hover:border-gray-400"
-          />
+          <Input type="text" placeholder="제목" ref={titleRef} />
+          <Input type="file" accept="image/*" ref={fileRef} />
+
           <ReactSelect
             options={existingCategories.map((category) => ({
               label: category,
