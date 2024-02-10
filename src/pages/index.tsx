@@ -1,7 +1,28 @@
-import { Inter } from "next/font/google";
+import PostCard from '@/components/PostCard';
+import { createClient } from '@/utils/supabase/client';
+import { useQuery } from '@tanstack/react-query';
 
-const inter = Inter({ subsets: ["latin"] });
+const supabase = createClient();
 
 export default function Home() {
-  return <main className='h-[2000px]'>ddd</main>;
+  const { data: posts } = useQuery({
+    queryKey: ['posts'],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('Post')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!data) return [];
+      return data;
+    },
+  });
+
+  return (
+    <main className='h-[2000px]'>
+      <div className='container mx-auto grid grid-cols-2 gap-x-4 gap-y-6 lg:gap-x-7 lg:gap-y-12 px-4 pb-24 pt-20'>
+        {posts?.map((post) => <PostCard key={post.id} {...post} />)}
+      </div>
+    </main>
+  );
 }
