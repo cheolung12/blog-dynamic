@@ -18,7 +18,7 @@ export default function Post({
   thumbnail,
 }: PostProps) {
   return (
-    <div className="container mx-auto flex flex-col px-4 pb-40 pt-20 gap-8">
+    <div className="container flex flex-col pb-40 pt-20 gap-8">
       <h1 className="text-4xl font-bold">{title}</h1>
       <div className="flex flex-row items-center gap-2">
         <Link
