@@ -1,4 +1,6 @@
 import { cn } from "@/utils/style";
+import { createClient } from '@/utils/supabase/client';
+import { useQuery } from '@tanstack/react-query';
 import Link from "next/link";
 import { FC } from "react";
 import { AiFillGithub, AiFillInstagram, AiOutlineClose } from "react-icons/ai";
@@ -9,11 +11,21 @@ type SidebarProps = {
   close: () => void;
 };
 
+const supabase = createClient();
+
 const Sidebar: FC<SidebarProps> = ({ isOpen, close }) => {
+  const { data: existingCategories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      const { data } = await supabase.from('Post').select('category');
+      return Array.from(new Set(data?.map((d) => d.category)));
+    }
+  });
+  
   return (
     <div
       className={cn(
-        "min-h-screen absolute flex-col gap-6 border-r bg-white p-10 pr-6 text-base lg:relative",
+        "min-h-screen absolute z-10 flex-col gap-6 border-r bg-white p-10 pr-6 text-base lg:relative",
         isOpen ? "flex" : "hidden",
       )}
     >
@@ -29,12 +41,16 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, close }) => {
       >
         태그
       </Link>
-      <Link
-        href="/category/Web-Development"
+      {existingCategories?.map((category) => (
+        <Link
+        href={`/category/${category}`}
+        key={category}
         className="w-48 font-medium text-gray-600 hover:underline"
       >
         Web Development
       </Link>
+      ))}
+      
       <div className="mt-10 flex items-center gap-4">
         <IconButton
           Icon={AiFillGithub}
