@@ -1,13 +1,10 @@
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import { MarkdownEditor } from '@/components/Markdown';
-import { createClient } from '@/utils/supabase/client';
-import { useQuery } from '@tanstack/react-query';
+import { useCategories, useTags } from '@/utils/hooks';
 import { useRouter } from 'next/router';
 import { FormEvent, useRef, useState } from 'react';
 import ReactSelect from 'react-select/creatable';
-
-const supabase = createClient();
 
 export default function Write() {
   const titleRef = useRef<HTMLInputElement>(null);
@@ -17,23 +14,8 @@ export default function Write() {
   const [content, setContent] = useState('');
   const router = useRouter();
 
-  const { data: existingCategories } = useQuery({
-    queryKey: ['categories'],
-    queryFn: async () => {
-      const { data } = await supabase.from('Post').select('category');
-
-      return Array.from(new Set(data?.map((d) => d.category)));
-    },
-  });
-
-  const { data: existingTags } = useQuery({
-    queryKey: ['tags'],
-    queryFn: async () => {
-      const { data } = await supabase.from('Post').select('tags');
-
-      return Array.from(new Set(data?.flatMap((d) => JSON.parse(d.tags))));
-    },
-  });
+  const { data: existingCategories } = useCategories();
+  const { data: existingTags } = useTags();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

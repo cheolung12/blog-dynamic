@@ -1,18 +1,8 @@
-import { createClient } from '@/utils/supabase/client';
-import { useQuery } from '@tanstack/react-query';
+import { useTags } from '@/utils/hooks';
 import Link from 'next/link';
 
-const supabase = createClient();
-
 export default function Tags() {
-  const { data: existingTags } = useQuery({
-    queryKey: ['tags'],
-    queryFn: async () => {
-      const { data } = await supabase.from('Post').select('tags');
-
-      return Array.from(new Set(data?.flatMap((d) => JSON.parse(d.tags))));
-    },
-  });
+  const { data: existingTags } = useTags();
 
   return (
     <div className='flex flex-col items-center gap-2 px-4 pb-24 pt-20'>
