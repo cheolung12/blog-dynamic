@@ -1,34 +1,35 @@
-import Input from "@/components/Input";
-import { MarkdownEditor } from "@/components/Markdown";
-import { createClient } from "@/utils/supabase/client";
-import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/router";
-import { FormEvent, useRef, useState } from "react";
-import ReactSelect from "react-select/creatable";
+import Button from '@/components/Button';
+import Input from '@/components/Input';
+import { MarkdownEditor } from '@/components/Markdown';
+import { createClient } from '@/utils/supabase/client';
+import { useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
+import { FormEvent, useRef, useState } from 'react';
+import ReactSelect from 'react-select/creatable';
 
 const supabase = createClient();
 
 export default function Write() {
   const titleRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
-  const [category, setCategory] = useState("");
-  const [tags, setTags] = useState("");
-  const [content, setContent] = useState("");
+  const [category, setCategory] = useState('');
+  const [tags, setTags] = useState('');
+  const [content, setContent] = useState('');
   const router = useRouter();
-  
+
   const { data: existingCategories } = useQuery({
-    queryKey: ["categories"],
+    queryKey: ['categories'],
     queryFn: async () => {
-      const { data } = await supabase.from("Post").select("category");
+      const { data } = await supabase.from('Post').select('category');
 
       return Array.from(new Set(data?.map((d) => d.category)));
     },
   });
 
   const { data: existingTags } = useQuery({
-    queryKey: ["tags"],
+    queryKey: ['tags'],
     queryFn: async () => {
-      const { data } = await supabase.from("Post").select("tags");
+      const { data } = await supabase.from('Post').select('tags');
 
       return Array.from(new Set(data?.flatMap((d) => JSON.parse(d.tags))));
     },
@@ -39,24 +40,24 @@ export default function Write() {
 
     // 유효성 검사
     if (!titleRef.current?.value || titleRef.current.value.length === 0)
-      return alert("제목을 입력해주세요.");
-    if (category.length === 0) return alert("카테고리를 입력해주세요.");
-    if (tags.length === 0) return alert("태그를 입력해주세요.");
-    if (content.length === 0) return alert("글 내용을 입력해주세요.");
+      return alert('제목을 입력해주세요.');
+    if (category.length === 0) return alert('카테고리를 입력해주세요.');
+    if (tags.length === 0) return alert('태그를 입력해주세요.');
+    if (content.length === 0) return alert('글 내용을 입력해주세요.');
 
     const formData = new FormData();
 
-    formData.append("title", titleRef.current?.value ?? "");
-    formData.append("category", category);
-    formData.append("tags", tags);
-    formData.append("content", content);
+    formData.append('title', titleRef.current?.value ?? '');
+    formData.append('category', category);
+    formData.append('tags', tags);
+    formData.append('content', content);
 
     if (fileRef.current?.files?.[0]) {
-      formData.append("thumbnail", fileRef.current.files[0]);
+      formData.append('thumbnail', fileRef.current.files[0]);
     }
 
-    const response = await fetch("/api/posts", {
-      method: "POST",
+    const response = await fetch('/api/posts', {
+      method: 'POST',
       body: formData,
     });
 
@@ -68,19 +69,19 @@ export default function Write() {
   };
 
   return (
-    <div className="container flex flex-col pb-20 pt-12">
-      <h1 className="mb-8 text-2xl font-medium">새로운 글</h1>
+    <div className='container flex flex-col pb-20 pt-12'>
+      <h1 className='mb-8 text-2xl font-medium'>새로운 글</h1>
       <form onSubmit={handleSubmit}>
-        <div className="flex flex-col gap-3">
-          <Input type="text" placeholder="제목" ref={titleRef} />
-          <Input type="file" accept="image/*" ref={fileRef} />
+        <div className='flex flex-col gap-3'>
+          <Input type='text' placeholder='제목' ref={titleRef} />
+          <Input type='file' accept='image/*' ref={fileRef} />
 
           <ReactSelect
             options={(existingCategories ?? []).map((category) => ({
               label: category,
               value: category,
             }))}
-            placeholder="카테고리"
+            placeholder='카테고리'
             onChange={(e) => e && setCategory(e.value)}
             isMulti={false}
           />
@@ -89,7 +90,7 @@ export default function Write() {
               label: tag,
               value: tag,
             }))}
-            placeholder="태그"
+            placeholder='태그'
             onChange={(e) =>
               e && setTags(JSON.stringify(e.map((e) => e.value)))
             }
@@ -98,15 +99,13 @@ export default function Write() {
           <MarkdownEditor
             height={500}
             value={content}
-            onChange={(s) => setContent(s ?? "")}
+            onChange={(s) => setContent(s ?? '')}
           />
         </div>
-        <button
-          type="submit"
-          className="mt-4 w-full rounded-md bg-gray-800 py-2 text-white"
-        >
+        <Button type='submit' className='mt-4'>
           작성하기
-        </button>
+        </Button>
+        작성하기
       </form>
     </div>
   );
