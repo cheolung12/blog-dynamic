@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FC } from "react";
-import { AiOutlineSetting } from "react-icons/ai";
 import { BsPencilSquare } from "react-icons/bs";
+import { RiAdminLine } from "react-icons/ri";
 import IconButton from "./IconButton";
 
 const Footer: FC = () => {
@@ -16,7 +16,7 @@ const Footer: FC = () => {
       <div className="flex items-center gap-2 lg:gap-3">
         <div className="pr-1 text-sm lg:pr-2 lg:text-base">ADMIN</div>
         <IconButton
-          Icon={AiOutlineSetting}
+          Icon={RiAdminLine}
           component={Link}
           href="/admin"
           className="text-gray-500 hover:text-gray-600"
