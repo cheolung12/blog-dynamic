@@ -9,7 +9,6 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
   if (user?.role !== 'authenticated')
     return NextResponse.redirect(new URL('/admin', request.url));
-  console.log('response', response);
   return response;
 }
 
