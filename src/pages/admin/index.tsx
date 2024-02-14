@@ -12,7 +12,6 @@ export default function Admin() {
   const pwRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const [userResponse, setUserResponse] = useState<UserResponse>();
-  console.log(userResponse);
   useEffect(() => {
     (async () => {
       const user = await supabase.auth.getUser();
@@ -34,7 +33,7 @@ export default function Admin() {
   };
 
   return (
-    <div className='container flex flex-col pb-20 pt-12'>
+    <div className='container flex flex-col pb-20 pt-12 justify-center w-[400px]'>
       {!!userResponse?.data.user ? (
         <div className='flex flex-col gap-2'>
           <div className='mb-8'>
@@ -55,7 +54,7 @@ export default function Admin() {
           <form onSubmit={handleSubmit}>
             <div className='flex flex-col gap-3'>
               <Input type='text' placeholder='Admin ID' ref={emailRef} />
-              <Input type='text' placeholder='Admin PW' ref={pwRef} />
+              <Input type='password' placeholder='Admin PW' ref={pwRef} />
             </div>
             <Button type='submit' className='mt-4'>
               로그인
