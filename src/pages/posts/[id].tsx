@@ -9,7 +9,6 @@ import Link from "next/link";
 type PostProps = Post;
 
 export default function Post({
-  id,
   title,
   category,
   content,
