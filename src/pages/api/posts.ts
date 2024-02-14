@@ -14,7 +14,6 @@ export default async function handler(
   const form = formidable();
   
   const [fields, files] = await form.parse(req);
-  
   let thumbnail: string | null = null;
   
   const supabase = await createClient(req.cookies);
@@ -23,6 +22,7 @@ export default async function handler(
     const file = files.thumbnail[0];
     const fileContent = await readFileSync(file.filepath);
     const fileName = `${file.newFilename}_${file.originalFilename}`;
+
     const { data: uploadData, error } = await supabase.storage
       .from('blog-thumbnail')
       .upload(fileName, fileContent, {
@@ -39,24 +39,19 @@ export default async function handler(
     }
   }
 
-  const { title, category, tags, content } = fields;
+  const { title, category, content } = fields;
 
   const postRequest = {
     title: title?.[0],
     category: category?.[0],
-    tags: tags?.[0],
     content: content?.[0],
     thumbnail,
   } as PostRequest;
 
   const { data } = await supabase.from('Post').insert([postRequest]).select();
-
+  
   if (data && data.length === 1) {
-    const { tags, ...reset } = data[0];
-    res.status(200).json({
-      ...reset,
-      tags: JSON.parse(tags) as string[],
-    });
+    res.status(200).json(data[0]);
   } else res.status(500).end();
 }
 

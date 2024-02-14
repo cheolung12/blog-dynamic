@@ -1,7 +1,7 @@
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import { MarkdownEditor } from '@/components/Markdown';
-import { useCategories, useTags } from '@/utils/hooks';
+import { useCategories } from '@/utils/hooks';
 import { useRouter } from 'next/router';
 import { FormEvent, useRef, useState } from 'react';
 import ReactSelect from 'react-select/creatable';
@@ -10,12 +10,10 @@ export default function Write() {
   const titleRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [category, setCategory] = useState('');
-  const [tags, setTags] = useState('');
   const [content, setContent] = useState('');
   const router = useRouter();
 
   const { data: existingCategories } = useCategories();
-  const { data: existingTags } = useTags();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,14 +22,12 @@ export default function Write() {
     if (!titleRef.current?.value || titleRef.current.value.length === 0)
       return alert('제목을 입력해주세요.');
     if (category.length === 0) return alert('카테고리를 입력해주세요.');
-    if (tags.length === 0) return alert('태그를 입력해주세요.');
     if (content.length === 0) return alert('글 내용을 입력해주세요.');
 
     const formData = new FormData();
 
     formData.append('title', titleRef.current?.value ?? '');
     formData.append('category', category);
-    formData.append('tags', tags);
     formData.append('content', content);
 
     if (fileRef.current?.files?.[0]) {
@@ -42,9 +38,9 @@ export default function Write() {
       method: 'POST',
       body: formData,
     });
-
+    console.log(response);
     const data = await response.json();
-
+    
     if (data.id) {
       router.push(`/posts/${data.id}`);
     }
@@ -67,17 +63,6 @@ export default function Write() {
             onChange={(e) => e && setCategory(e.value)}
             isMulti={false}
           />
-          <ReactSelect
-            options={(existingTags ?? []).map((tag) => ({
-              label: tag,
-              value: tag,
-            }))}
-            placeholder='태그'
-            onChange={(e) =>
-              e && setTags(JSON.stringify(e.map((e) => e.value)))
-            }
-            isMulti={true}
-          />
           <MarkdownEditor
             height={500}
             value={content}
@@ -87,7 +72,6 @@ export default function Write() {
         <Button type='submit' className='mt-4'>
           작성하기
         </Button>
-        작성하기
       </form>
     </div>
   );
