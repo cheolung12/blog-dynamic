@@ -19,7 +19,6 @@ const config: Config = {
     },
     container: {
       center: true,
-      padding: '16px',
     }
   },
   plugins: [],
