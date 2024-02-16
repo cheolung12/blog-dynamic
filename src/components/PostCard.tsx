@@ -15,7 +15,7 @@ const PostCard: FC<PostCardProps> = ({
 }) => {
   return (
     <Link
-      href={`/post/${id}`}
+      href={`/posts/${id}`}
       className={cn('flex hover:bg-slate-100 gap-4 p-4 rounded-sm')}
     >
       <div className='relative aspect-[1.8/1] w-[300px]'>
