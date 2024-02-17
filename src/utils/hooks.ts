@@ -26,6 +26,10 @@ export const usePlainText = (markdownText: string): string => {
   plainText = plainText.replace(/```[\s\S]*?```| {4,}.*\n/g, '');
   // 블록 인용문 제거
   plainText = plainText.replace(/^>\s?/gm, '');
-  
+  // HTML <br /> 태그 제거
+  plainText = plainText.replace(/<br\s*\/?>/gi, '');
+  // HTML <span> 태그 및 내용 제거 (태그 내의 내용은 유지)
+  plainText = plainText.replace(/<span[^>]*>(.*?)<\/span>/gi, '$1');
+
   return plainText;
 };
