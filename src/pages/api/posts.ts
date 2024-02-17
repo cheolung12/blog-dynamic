@@ -1,4 +1,5 @@
 import { Post, PostRequest } from '@/types';
+import { usePlainText } from '@/utils/hooks';
 import { createClient } from '@/utils/supabase/server';
 import type { StorageError } from '@supabase/storage-js';
 import formidable from 'formidable';
@@ -40,16 +41,18 @@ export default async function handler(
   }
 
   const { title, category, content } = fields;
+  const plainText = usePlainText(content?.[0] as string);
 
-  const postRequest = {
+  const postRequest = await {
     title: title?.[0],
     category: category?.[0],
     content: content?.[0],
+    description: plainText,
     thumbnail,
   } as PostRequest;
 
   const { data } = await supabase.from('Post').insert([postRequest]).select();
-  
+
   if (data && data.length === 1) {
     res.status(200).json(data[0]);
   } else res.status(500).end();

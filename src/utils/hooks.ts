@@ -12,3 +12,20 @@ export const useCategories = () =>
       return Array.from(new Set(data?.map((d) => d.category)));
     },
   });
+
+export const usePlainText = (markdownText: string): string => {
+  // 헤더 제거
+  let plainText = markdownText.replace(/#+\s/g, '');
+  // 리스트 항목 제거
+  plainText = plainText.replace(/-\s/g, '');
+  // 굵게, 기울임꼴, 취소선 제거
+  plainText = plainText.replace(/\*\*?|__?|~~/g, '');
+  // 이미지 ![](링크), 링크 [](링크) 제거
+  plainText = plainText.replace(/!\[.*?\]\(.*?\)|\[.*?\]\(.*?\)/g, '');
+  // 코드 블록 제거
+  plainText = plainText.replace(/```[\s\S]*?```| {4,}.*\n/g, '');
+  // 블록 인용문 제거
+  plainText = plainText.replace(/^>\s?/gm, '');
+  
+  return plainText;
+};

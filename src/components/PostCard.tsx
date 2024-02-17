@@ -10,7 +10,7 @@ type PostCardProps = Post;
 const PostCard: FC<PostCardProps> = ({
   id,
   title,
-  content,
+  description,
   thumbnail,
   created_at,
 }) => {
@@ -30,11 +30,13 @@ const PostCard: FC<PostCardProps> = ({
         />
       </div>
       <div className='p-2 w-full'>
-        <div className='flex items-center justify-between mb-2.5'> 
+        <div className='flex items-center justify-between mb-2.5'>
           <h2 className='text-xl font-bold '>{title}</h2>
-          <span className='text-sm text-slate-400'>{format(new Date(created_at), 'yyyy-MM-d')}</span>
+          <span className='text-sm text-slate-400'>
+            {format(new Date(created_at), 'yyyy-MM-d')}
+          </span>
         </div>
-        <p className='line-clamp-3 text-sm w-[500px]'>{content}</p>
+        <p className='line-clamp-3 text-sm w-[500px]'>{description}</p>
       </div>
     </Link>
   );

@@ -38,7 +38,7 @@ export default function Write() {
       method: 'POST',
       body: formData,
     });
-    console.log(response);
+    
     const data = await response.json();
     
     if (data.id) {
