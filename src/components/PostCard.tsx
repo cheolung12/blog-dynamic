@@ -1,5 +1,6 @@
 import { Post } from '@/types';
 import { cn } from '@/utils/style';
+import { format } from 'date-fns';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FC } from 'react';
@@ -29,9 +30,9 @@ const PostCard: FC<PostCardProps> = ({
         />
       </div>
       <div className='p-2 w-full'>
-        <div className='flex items-center gap-4 mb-2'> 
-          <h2 className='text-lg font-medium '>{title}</h2>
-          <span>{created_at}</span>
+        <div className='flex items-center justify-between mb-2.5'> 
+          <h2 className='text-xl font-bold '>{title}</h2>
+          <span className='text-sm text-slate-400'>{format(new Date(created_at), 'yyyy-MM-d')}</span>
         </div>
         <p className='line-clamp-3 text-sm w-[500px]'>{content}</p>
       </div>
