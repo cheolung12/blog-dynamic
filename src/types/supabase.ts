@@ -14,7 +14,7 @@ export type Database = {
           category: string
           content: string
           created_at: string
-          description: string | null
+          description?: string | null
           id: number
           thumbnail: string | null
           title: string
