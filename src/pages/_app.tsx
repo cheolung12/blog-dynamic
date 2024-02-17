@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <div className={cn('flex h-screen w-screen', inter.className)}>
         <div className='flex flex-col mx-auto w-[800px]'>
           <Header />
-          <div className='flex flex-1 flex-col overflow-y-auto'>
+          <div className='flex flex-1 flex-col overflow-y-auto pt-10'>
             <main className='flex-1'>
               <Component {...pageProps} />
             </main>
