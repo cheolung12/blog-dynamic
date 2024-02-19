@@ -62,6 +62,7 @@ export default function Write() {
             placeholder='카테고리'
             onChange={(e) => e && setCategory(e.value)}
             isMulti={false}
+            inputId="category"
           />
           <MarkdownEditor
             height={500}

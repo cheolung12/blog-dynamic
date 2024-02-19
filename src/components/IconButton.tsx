@@ -1,6 +1,6 @@
-import { cn } from "@/utils/style";
-import { ComponentPropsWithoutRef, ElementType, createElement } from "react";
-import { IconType } from "react-icons";
+import { cn } from '@/utils/style';
+import { ComponentPropsWithoutRef, ElementType, createElement } from 'react';
+import { IconType } from 'react-icons';
 
 type IconButtonProps<Component extends ElementType> =
   ComponentPropsWithoutRef<Component> & {
@@ -8,9 +8,10 @@ type IconButtonProps<Component extends ElementType> =
     iconClassName?: string;
     className?: string;
     component?: Component;
+    label?: string;
   };
 
-const IconButton = <Component extends ElementType = "button">({
+const IconButton = <Component extends ElementType = 'button'>({
   component,
   className,
   iconClassName,
@@ -18,11 +19,15 @@ const IconButton = <Component extends ElementType = "button">({
   ...props
 }: IconButtonProps<Component>) => {
   return createElement(
-    component ?? "button",
-    { className: cn("p-1.5 lg:p-2", className), ...props },
+    component ?? 'button',
+    {
+      className: cn('p-1.5 lg:p-2', className),
+      'data-cy': props.label,
+      ...props,
+    },
     <Icon
-      className={cn("h-5 w-5 transition-all lg:h-6 lg:w-6", iconClassName)}
-    />,
+      className={cn('h-5 w-5 transition-all lg:h-6 lg:w-6', iconClassName)}
+    />
   );
 };
 

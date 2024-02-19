@@ -26,6 +26,7 @@ const Footer: FC = () => {
           component={Link}
           href="/write"
           className="text-gray-500 hover:text-gray-600"
+          label='write'
         />
       </div>
     </footer>
